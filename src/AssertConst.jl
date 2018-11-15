@@ -1,5 +1,8 @@
 module AssertConst
 
+using InteractiveUtils
+
+
 macro assertconst(f)
     if isa(f, Expr) && (f.head === :function || Base.is_short_function_def(f))
         signature = f.args[1]
@@ -24,8 +27,8 @@ Base.@pure function assert_is_constexpr(f, args)
                               $(join(failures, "\n"))"""))
     end
 end
-function is_constexpr(f, args)
-    (CI,r) = Main.InteractiveUtils.@code_typed optimize=false f(args...)
+Base.@pure function is_constexpr(f, args)
+    (CI,r) = InteractiveUtils.@code_typed optimize=false f(args...)
     failures = []
     for e in CI.code
         if e isa Core.Compiler.Const && e.val isa Expr && e.val.head == :return
