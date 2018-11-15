@@ -1,7 +1,8 @@
 module AssertConst
 
-using InteractiveUtils
+export @assertconst
 
+using InteractiveUtils
 
 macro assertconst(f)
     if isa(f, Expr) && (f.head === :function || Base.is_short_function_def(f))
